@@ -19,7 +19,7 @@ exports.resetPasswordToken = async (req,res)=>{
     }
     // generate token
     const token = crypto.randomBytes(20).toString("hex");
-    console.log(token)
+    // console.log(token)
     // update user by adding token and expiration time 
     const updatedDetails = await User.findOneAndUpdate({email:email},
         {
@@ -28,7 +28,7 @@ exports.resetPasswordToken = async (req,res)=>{
         },
         {new:true}
         )
-    console.log("DETAILS", updatedDetails);
+    // console.log("DETAILS", updatedDetails);
     // create url
     const url = `http://localhost:3000/update-password/${token}`
     // send mail containing the url
