@@ -32,9 +32,9 @@ exports.sentOTP = async (req, res) => {
 			specialChars: false,
 		});
 		const result = await OTP.findOne({ otp: otp });
-		console.log("Result is Generate OTP Func");
-		console.log("OTP", otp);
-		console.log("Result", result);
+		// console.log("Result is Generate OTP Func");
+		// console.log("OTP", otp);
+		// console.log("Result", result);
 		while (result) {
 			otp = otpGenerator.generate(6, {
 				upperCaseAlphabets: false,
@@ -42,7 +42,7 @@ exports.sentOTP = async (req, res) => {
 		}
 		const otpPayload = { email, otp };
 		const otpBody = await OTP.create(otpPayload);
-		console.log("OTP Body", otpBody);
+		// console.log("OTP Body", otpBody);
 		res.status(200).json({
 			success: true,
 			message: `OTP Sent Successfully`,
@@ -70,7 +70,7 @@ exports.signUp = async (req,res)=>{
         if(password!==confirmPassword){
             return res.status(400).json({
                 success:false,
-                message:"Password do not match, please try again!"
+                message:"Password and Confirm Password do not match. Please try again."
             })
         }
         // check if user already exists 
@@ -83,7 +83,7 @@ exports.signUp = async (req,res)=>{
         }
         // find most recent otp for the user 
         const recentOtp = await OTP.find({email}).sort({createdAt:-1}).limit(1)
-        console.log(recentOtp)
+        // console.log(recentOtp)
         // validate otp
         if(recentOtp.length===0){
             // otp nhi mila
@@ -227,28 +227,6 @@ exports.changePassword = async (req, res) => {
 			{ new: true }
 		);
 
-		// Send notification email if you want
-        // try {
-        //     const emailResponse = await mailSender(
-        //       updatedUserDetails.email,
-        //       "Password for your account has been updated",
-        //       passwordUpdated(
-        //         updatedUserDetails.email,
-        //         `Password updated successfully for ${updatedUserDetails.firstName} ${updatedUserDetails.lastName}`
-        //       )
-        //     )
-        //     console.log("Email sent successfully:", emailResponse.response)
-        //   } catch (error) {
-        //     // If there's an error sending the email, log the error and return a 500 (Internal Server Error) error
-        //     console.error("Error occurred while sending email:", error)
-        //     return res.status(500).json({
-        //       success: false,
-        //       message: "Error occurred while sending email",
-        //       error: error.message,
-        //     })
-        //   }
-
-		// Return success response
 		return res
 			.status(200)
 			.json({ success: true, message: "Password updated successfully" });
